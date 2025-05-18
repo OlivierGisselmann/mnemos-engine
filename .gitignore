@@ -7,3 +7,6 @@ out/*
 .vs/*
 .vscode/*
 compile_commands.json
+
+# CMake presets
+CMakeUserPresets.json
