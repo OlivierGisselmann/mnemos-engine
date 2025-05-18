@@ -1,0 +1,9 @@
+# Build directories
+build/*
+out/*
+
+# IDE config directories
+.cache/*
+.vs/*
+.vscode/*
+compile_commands.json
