@@ -1,13 +1,14 @@
 #include <engine.hpp>
 
-void mnm::context::init()
-{
 
+void mnm::context::init(const context_config& config)
+{
+    
 }
 
 void mnm::context::shutdown()
 {
-
+    
 }
 
 void mnm::context::main_loop()
