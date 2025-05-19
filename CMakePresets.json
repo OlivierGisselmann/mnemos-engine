@@ -5,37 +5,74 @@
         {
             "name": "common",
             "hidden": true,
-            "generator": "Ninja",
             "binaryDir": "out/${presetName}"
         },
         {
-            "name": "debug",
-            "displayName": "Debug",
+            "name": "ninja-debug",
+            "displayName": "Ninja Debug",
             "inherits": "common",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
-            "name": "release",
-            "displayName": "Release",
+            "name": "ninja-release",
+            "displayName": "Ninja Release",
             "inherits": "common",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "msvc-debug",
+            "displayName": "MSVC Debug",
+            "inherits": "common",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "msvc-release",
+            "displayName": "MSVC Release",
+            "inherits": "common",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "game-debug",
-            "displayName": "Game Debug Build",
-            "configurePreset": "debug",
+            "name": "debug-ninja-build",
+            "displayName": "Debug Ninja Build",
+            "configurePreset": "ninja-debug",
             "configuration": "Debug"
         },
         {
-            "name": "game-release",
-            "displayName": "Game Release Build",
-            "configurePreset": "release",
+            "name": "release-ninja-build",
+            "displayName": "Release Ninja Build",
+            "configurePreset": "ninja-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "debug-msvc-build",
+            "displayName": "Debug MSVC Build",
+            "configurePreset": "msvc-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "release-msvc-build",
+            "displayName": "Release MSVC Build",
+            "configurePreset": "msvc-release",
             "configuration": "Release"
         }
     ]
