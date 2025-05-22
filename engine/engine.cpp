@@ -6,6 +6,16 @@
 // TODO: Implement singleton?
 static mnm::logger s_logger;
 
+mnm::context::context() : m_renderer(s_logger)
+{
+
+}
+
+mnm::context::~context()
+{
+
+}
+
 void mnm::context::init(const context_config& config)
 {
     // Start up engine
@@ -14,6 +24,7 @@ void mnm::context::init(const context_config& config)
     // Init subsystems
     init_logging();
     init_window(config.width, config.height, config.window_title);
+    init_renderer();
 }
 
 void mnm::context::init_logging()
@@ -27,10 +38,10 @@ void mnm::context::init_logging()
 void mnm::context::init_window(u16 width, u16 height, const char* title)
 {
     #if defined(MNEMOS_PLATFORM_LINUX)
-        m_window = new mnm::linux_window();
+        m_window = new mnm::linux_window(s_logger);
 
         if(!m_window->init({width, height, title}))
-            s_logger.log_fatal("Failed to initialize the window");
+            s_logger.log_fatal("Failed to initialize window");
     #elif defined(MNEMOS_PLATFORM_WINDOWS)
         // TODO: Windows implementation
     #endif
@@ -38,7 +49,8 @@ void mnm::context::init_window(u16 width, u16 height, const char* title)
 
 void mnm::context::init_renderer()
 {
-    m_renderer.init();
+    if(!m_renderer.init())
+        s_logger.log_fatal("Failed to initialize renderer");
 }
 
 void mnm::context::shutdown()
@@ -87,5 +99,5 @@ void mnm::context::render_scene()
 
 void mnm::context::swap_buffers()
 {
-
+    m_window->swap_buffers();
 }

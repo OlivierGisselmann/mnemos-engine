@@ -25,6 +25,9 @@ namespace mnm
     class context
     {
     public:
+        context();
+        ~context();
+
         void init(const context_config& config);
         void main_loop();
         void shutdown();
@@ -43,6 +46,6 @@ namespace mnm
 
         // Subsystems
         window* m_window{};
-        renderer m_renderer{};
+        renderer m_renderer;
     };
 }

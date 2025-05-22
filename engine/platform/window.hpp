@@ -19,6 +19,7 @@ namespace mnm
         virtual ~window(){}
 
         virtual void update() = 0;
+        virtual void swap_buffers() = 0;
         virtual bool close_requested() = 0;
 
     protected:

@@ -1,5 +1,8 @@
 project(engine)
 
+# Fetch OpenGL library
+find_package(OpenGL REQUIRED)
+
 # Get all source files
 file(GLOB_RECURSE ENGINE_SOURCES LIST_DIRECTORIES=ON *.[hc]pp)
 
@@ -11,5 +14,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 if(UNIX)
     find_package(X11 REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${X11_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${X11_LIBRARIES} ${OPENGL_LIBRARY})
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARY})
 endif()
