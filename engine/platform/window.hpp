@@ -14,7 +14,7 @@ namespace mnm
     class window
     {
     public:
-        virtual void init(const window_config& config) = 0;
+        virtual bool init(const window_config& config) = 0;
         virtual void shutdown() = 0;
         virtual ~window(){}
 

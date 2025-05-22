@@ -12,7 +12,7 @@ namespace mnm
     class linux_window : public window
     {
     public:
-        void init(const window_config& config);
+        bool init(const window_config& config);
         void shutdown();
 
         void update();

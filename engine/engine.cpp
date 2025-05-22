@@ -11,6 +11,7 @@ void mnm::context::init(const context_config& config)
     // Start up engine
     m_running = true;
 
+    // Init subsystems
     init_logging();
     init_window(config.width, config.height, config.window_title);
 }
@@ -27,7 +28,9 @@ void mnm::context::init_window(u16 width, u16 height, const char* title)
 {
     #if defined(MNEMOS_PLATFORM_LINUX)
         m_window = new mnm::linux_window();
-        m_window->init({width, height, title});
+
+        if(!m_window->init({width, height, title}))
+            s_logger.log_fatal("Failed to initialize the window");
     #elif defined(MNEMOS_PLATFORM_WINDOWS)
         // TODO: Windows implementation
     #endif
@@ -64,6 +67,7 @@ void mnm::context::update_window()
 {
     m_window->update();
     
+    // Stop main loop if user closes the window
     if(m_window->close_requested())
         m_running = false;
 }
