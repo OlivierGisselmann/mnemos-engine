@@ -36,9 +36,17 @@ void mnm::context::init_window(u16 width, u16 height, const char* title)
     #endif
 }
 
+void mnm::context::init_renderer()
+{
+    m_renderer.init();
+}
+
 void mnm::context::shutdown()
 {
     s_logger.log_trace("Engine shutdown");
+
+    // Shutdown renderer
+    m_renderer.shutdown();
 
     // Destroy window
     m_window->shutdown();
@@ -74,7 +82,7 @@ void mnm::context::update_window()
 
 void mnm::context::render_scene()
 {
-
+    m_renderer.render();
 }
 
 void mnm::context::swap_buffers()

@@ -2,6 +2,7 @@
 
 #include <platform/types.hpp>
 #include <platform/window.hpp>
+#include <renderer/renderer.hpp>
 
 #include <platform/platform_detection.hpp>
 
@@ -31,13 +32,17 @@ namespace mnm
     private:
         void init_logging();
         void init_window(u16 width, u16 height, const char* title);
+        void init_renderer();
 
         void poll_inputs();
         void update_window();
         void render_scene();
         void swap_buffers();
 
-        window* m_window{};
         bool m_running{};
+
+        // Subsystems
+        window* m_window{};
+        renderer m_renderer{};
     };
 }
