@@ -12,10 +12,11 @@ mnm::timer::~timer()
 
 }
 
-void mnm::timer::init(bool show_fps)
+void mnm::timer::init(f32 target_framerate, bool show_fps)
 {
     m_last_time = Clock::now();
     m_show_fps = show_fps;
+    m_target_framerate = target_framerate;
 }
 
 void mnm::timer::update()
@@ -30,7 +31,7 @@ void mnm::timer::update()
 void mnm::timer::sleep()
 {
     m_frame_time = (Clock::now() - m_current_time).count() / 1e9;
-    m_sleep_time = (1.0 / 120.0) - m_frame_time;
+    m_sleep_time = (1.0 / m_target_framerate) - m_frame_time;
 
     // Sleep if frame was shorter than targeted fps
     if(m_sleep_time > 0)

@@ -23,8 +23,8 @@ void mnm::context::init(const context_config& config)
 
     // Init subsystems
     init_logging();
-    init_window(config.width, config.height, config.window_title);
-    init_renderer();
+    init_window(config.width, config.height, config.window_title, config.vsync);
+    init_renderer(config.target_framerate);
 }
 
 void mnm::context::init_logging()
@@ -35,7 +35,7 @@ void mnm::context::init_logging()
     s_logger.log_trace("Engine initialization");
 }
 
-void mnm::context::init_window(u16 width, u16 height, const char* title)
+void mnm::context::init_window(u16 width, u16 height, const char* title, bool vsync)
 {
     #if defined(MNEMOS_PLATFORM_LINUX)
         m_window = new mnm::linux_window(s_logger);
@@ -45,7 +45,7 @@ void mnm::context::init_window(u16 width, u16 height, const char* title)
                 .width = width,
                 .height = height, 
                 .title = title,
-                .vsync = false
+                .vsync = vsync
             }
         ))
             s_logger.log_fatal("Failed to initialize window");
@@ -54,12 +54,12 @@ void mnm::context::init_window(u16 width, u16 height, const char* title)
     #endif
 }
 
-void mnm::context::init_renderer()
+void mnm::context::init_renderer(f32 target_framerate)
 {
     if(!m_renderer.init())
         s_logger.log_fatal("Failed to initialize renderer");
 
-    m_timer.init(true);
+    m_timer.init(target_framerate, true);
 }
 
 void mnm::context::shutdown()

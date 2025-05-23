@@ -21,6 +21,9 @@ namespace mnm
         u16 height{};
         const char* window_title{};
         bool fullscreen{};
+
+        f32 target_framerate{};
+        bool vsync{};
     };
 
     class context
@@ -35,8 +38,8 @@ namespace mnm
 
     private:
         void init_logging();
-        void init_window(u16 width, u16 height, const char* title);
-        void init_renderer();
+        void init_window(u16 width, u16 height, const char* title, bool vsync);
+        void init_renderer(f32 target_framerate);
 
         void poll_inputs();
         void update_window();

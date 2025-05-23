@@ -10,7 +10,9 @@ int main()
         .width = 1280,
         .height = 720,
         .window_title = "Game - Mnemos Engine",
-        .fullscreen = false
+        .fullscreen = false,
+        .target_framerate = 120.0,
+        .vsync = true
     };
 
     mnm::context ctx{};
