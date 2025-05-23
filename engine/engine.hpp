@@ -22,7 +22,7 @@ namespace mnm
         const char* window_title{};
         bool fullscreen{};
 
-        f32 target_framerate{};
+        f64 target_framerate{};
         bool vsync{};
     };
 
@@ -39,7 +39,7 @@ namespace mnm
     private:
         void init_logging();
         void init_window(u16 width, u16 height, const char* title, bool vsync);
-        void init_renderer(f32 target_framerate);
+        void init_renderer(f64 target_framerate);
 
         void poll_inputs();
         void update_window();

@@ -14,7 +14,7 @@ namespace mnm
         timer(logger& logger);
         ~timer();
 
-        void init(f32 target_framerate, bool show_fps);
+        void init(f64 target_framerate, bool show_fps);
         void update();
         void sleep();
 
@@ -31,7 +31,7 @@ namespace mnm
         f64 m_fps_timer{};
 
         bool m_show_fps;
-        f32 m_target_framerate;
+        f64 m_target_framerate;
 
         // Utils
         logger& m_logger;

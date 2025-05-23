@@ -54,7 +54,7 @@ void mnm::context::init_window(u16 width, u16 height, const char* title, bool vs
     #endif
 }
 
-void mnm::context::init_renderer(f32 target_framerate)
+void mnm::context::init_renderer(f64 target_framerate)
 {
     if(!m_renderer.init())
         s_logger.log_fatal("Failed to initialize renderer");

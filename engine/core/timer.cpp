@@ -12,7 +12,7 @@ mnm::timer::~timer()
 
 }
 
-void mnm::timer::init(f32 target_framerate, bool show_fps)
+void mnm::timer::init(f64 target_framerate, bool show_fps)
 {
     m_last_time = Clock::now();
     m_show_fps = show_fps;
@@ -30,6 +30,7 @@ void mnm::timer::update()
 
 void mnm::timer::sleep()
 {
+    // TODO: Fix precision for high target framerate
     m_frame_time = (Clock::now() - m_current_time).count() / 1e9;
     m_sleep_time = (1.0 / m_target_framerate) - m_frame_time;
 
