@@ -3,6 +3,7 @@
 #include <platform/types.hpp>
 #include <platform/window.hpp>
 #include <renderer/renderer.hpp>
+#include <core/timer.hpp>
 
 #include <platform/platform_detection.hpp>
 
@@ -41,11 +42,13 @@ namespace mnm
         void update_window();
         void render_scene();
         void swap_buffers();
+        void update_timer();
 
         bool m_running{};
 
         // Subsystems
         window* m_window{};
         renderer m_renderer;
+        timer m_timer;
     };
 }

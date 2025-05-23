@@ -1,6 +1,8 @@
 #pragma once
 
+#include <chrono>
 #include <format>
+#include <iostream>
 #include <string>
 
 namespace mnm

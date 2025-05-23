@@ -1,8 +1,5 @@
 #include <core/log.hpp>
 
-#include <chrono>
-#include <iostream>
-
 void mnm::logger::init()
 {
 

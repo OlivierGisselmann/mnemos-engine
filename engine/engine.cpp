@@ -6,7 +6,7 @@
 // TODO: Implement singleton?
 static mnm::logger s_logger;
 
-mnm::context::context() : m_renderer(s_logger)
+mnm::context::context() : m_renderer(s_logger), m_timer(s_logger)
 {
 
 }
@@ -51,6 +51,8 @@ void mnm::context::init_renderer()
 {
     if(!m_renderer.init())
         s_logger.log_fatal("Failed to initialize renderer");
+
+    m_timer.init();
 }
 
 void mnm::context::shutdown()
@@ -72,6 +74,7 @@ void mnm::context::main_loop()
     while(m_running)
     {
         poll_inputs();
+        update_timer();
         update_window();
         render_scene();
         swap_buffers();
@@ -92,6 +95,11 @@ void mnm::context::update_window()
         m_running = false;
 }
 
+void mnm::context::update_timer()
+{
+    m_timer.update();
+}
+
 void mnm::context::render_scene()
 {
     m_renderer.render();
@@ -100,4 +108,5 @@ void mnm::context::render_scene()
 void mnm::context::swap_buffers()
 {
     m_window->swap_buffers();
+    m_timer.tick();
 }

@@ -131,8 +131,6 @@ bool mnm::linux_window::init(const mnm::window_config& config)
         &m_window_attributes
     );
 
-    m_logger.log_trace("Linux Window initialized");
-
     // Redirect close event
     wm_delete_window = XInternAtom(m_display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(m_display, m_window, &wm_delete_window, 1);
@@ -140,43 +138,14 @@ bool mnm::linux_window::init(const mnm::window_config& config)
     // Set window title
     XStoreName(m_display, m_window, config.title);
 
-    // Create OpenGL context
-    glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
-    glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)glXGetProcAddressARB((const GLubyte*) "glXCreateContextAttribsARB");
-
-    int context_attribs[] = 
-    {
-        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-        GLX_CONTEXT_MINOR_VERSION_ARB, 2,
-        GLX_CONTEXT_FLAGS_ARB, GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
-        None
-    };
-
-    // Get context extensions
-    const char* glx_extensions = glXQueryExtensionsString(m_display, m_screen_id);
-    if(!is_extension_supported(glx_extensions, "GLX_ARB_create_context"))
-    {
-        m_logger.log_warn("GLX_ARB_create_context not supported");
-        m_context = glXCreateNewContext(m_display, best_framebuffer_config, GLX_RGBA_TYPE, 0, True);
-    }
-    else
-    {
-        m_context = glXCreateContextAttribsARB(m_display, best_framebuffer_config, 0, true, context_attribs);
-    }
+    m_logger.log_trace("Linux Window initialized");
+    
+    // Disable VSync
     XSync(m_display, false);
-
-    // Check acquired context
-    if(!glXIsDirect(m_display, m_context))
-        m_logger.log_debug("Indirect GLX rendering context acquired");
-    else
-        m_logger.log_debug("Direct GLX rendering context acquired");
-
-    // Make context current
+    
+    // Create GLX context and make current
+    m_context = glXCreateContext(m_display, m_visual, nullptr, GL_TRUE);
     glXMakeCurrent(m_display, m_window, m_context);
-
-    //m_logger.log_trace(std::format("GL Renderer: {}", glGetString(GL_RENDERER)));
-    //m_logger.log_trace(std::format("GL Version: {}", glGetString(GL_VERSION)));
-    //m_logger.log_trace(std::format("GLSL Version: {}", glGetString(GL_SHADING_LANGUAGE_VERSION)));
 
     // Show the window
     XClearWindow(m_display, m_window);

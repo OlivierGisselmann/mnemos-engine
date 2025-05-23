@@ -40,7 +40,7 @@ namespace mnm
         // Utils
         logger& m_logger;
 
-        // Events
+        // XLib atoms
         Atom wm_delete_window;
     };
 }
