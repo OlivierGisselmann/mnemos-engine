@@ -23,12 +23,12 @@ namespace mnm
     private:
         std::chrono::_V2::system_clock::time_point m_last_time;
         std::chrono::_V2::system_clock::time_point m_current_time;
-        f64 m_delta_time;
-        f64 m_sleep_time;
+        f64 m_delta_time{};
+        f64 m_sleep_time{};
 
-        i64 m_frame_count;
-        f64 m_frame_time;
-        f64 m_fps_timer;
+        i64 m_frame_count{};
+        f64 m_frame_time{};
+        f64 m_fps_timer{};
 
         bool m_show_fps;
 
