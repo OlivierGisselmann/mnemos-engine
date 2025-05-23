@@ -9,6 +9,7 @@ namespace mnm
         u16 width;
         u16 height;
         const char* title;
+        bool vsync;
     };
 
     class window

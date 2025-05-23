@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/log.hpp>
+#include <platform/types.hpp>
 
 #include <GL/gl.h>
 
@@ -15,7 +16,7 @@ namespace mnm
         bool init();
         void shutdown();
 
-        void render();
+        void render(f64 delta_time);
 
     private:
         logger& m_logger;

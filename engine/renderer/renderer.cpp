@@ -20,7 +20,7 @@ void mnm::renderer::shutdown()
     m_logger.log_trace("Renderer destroyed");
 }
 
-void mnm::renderer::render()
+void mnm::renderer::render(f64 delta_time)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 

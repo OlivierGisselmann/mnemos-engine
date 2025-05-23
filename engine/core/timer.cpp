@@ -1,5 +1,7 @@
 #include <core/timer.hpp>
 
+using Clock = std::chrono::high_resolution_clock;
+
 mnm::timer::timer(logger& logger) : m_logger(logger)
 {
 
@@ -10,45 +12,43 @@ mnm::timer::~timer()
 
 }
 
-void mnm::timer::init()
+void mnm::timer::init(bool show_fps)
 {
-    m_prev_time = get_milliseconds();
-    m_current_time = get_milliseconds();
-    m_delta_time = 0.0;
-
-    // TODO: Remove hardcoded FPS value
-    m_skip_ticks = (1000.0 / 30);
-    m_sleep_time = 0;
-
-    gettimeofday(&m_time, nullptr);
-    m_next_game_tick = (m_time.tv_sec * 1000.0) + (m_time.tv_usec / 1000.0);
+    m_last_time = Clock::now();
+    m_show_fps = show_fps;
 }
 
 void mnm::timer::update()
 {
-    m_current_time = get_milliseconds();
-    m_delta_time = (m_current_time - m_prev_time) * 0.001;
-    m_prev_time = m_current_time;
+    m_current_time = Clock::now();
+    std::chrono::duration<f64> delta = m_current_time - m_last_time;
+    m_delta_time = delta.count();
+
+    m_last_time = m_current_time;
 }
 
-void mnm::timer::tick()
+void mnm::timer::sleep()
 {
-    gettimeofday(&m_time, nullptr);
-    m_next_game_tick += m_skip_ticks;
-    m_sleep_time = m_next_game_tick - ((m_time.tv_sec * 1000.0) + (m_time.tv_usec) / 1000.0);
+    m_frame_time = (Clock::now() - m_current_time).count() / 1e6;
+    m_sleep_time = (1.0 / 60.0) - m_frame_time;
 
-    usleep((unsigned int)(m_sleep_time / 1000.0));
-}
+    // Sleep if frame was shorter than targeted fps
+    if(m_sleep_time > 0)
+        usleep(static_cast<useconds_t>(m_sleep_time * 1e6));
 
-f64 mnm::timer::get_milliseconds()
-{
-    static timeval s_time_eval;
-    gettimeofday(&s_time_eval, nullptr);
-
-    f64 time = s_time_eval.tv_sec * 1000.0; // Seconds to Milliseconds
-    time += s_time_eval.tv_usec / 1000.0; // Microseconds to Milliseconds
-
-    return time;
+    // Debug printing
+    if(m_show_fps)
+    {
+        // Output FPS each second
+        m_fps_timer += m_delta_time;
+        m_frame_count++;
+        if(m_fps_timer >= 1.0)
+        {
+            m_logger.log_debug(std::format("FPS: {}", m_frame_count));
+            m_fps_timer = 0;
+            m_frame_count = 0;
+        }
+    }
 }
 
 f64 mnm::timer::get_delta_time()

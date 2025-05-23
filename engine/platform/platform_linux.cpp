@@ -5,9 +5,6 @@
 
 #ifdef MNEMOS_PLATFORM_LINUX
 
-// GLX Utils
-typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, Bool, const int*);
-
 static bool is_extension_supported(const char* extensions_list, const char* extension)
 {
     return strstr(extensions_list, extension);
@@ -40,6 +37,14 @@ bool mnm::linux_window::init(const mnm::window_config& config)
     if(majorGLX <= 1 && minorGLX < 2)
     {
         m_logger.log_fatal("GLX 1.2 or greater is required");
+        return false;
+    }
+
+    // Query extensions support
+    auto ext = glXQueryExtensionsString(m_display, m_screen_id);
+    if (!is_extension_supported(ext, "GLX_EXT_swap_control"))
+    {
+        m_logger.log_fatal("Unsupported GL extensions");
         return false;
     }
 
@@ -140,9 +145,6 @@ bool mnm::linux_window::init(const mnm::window_config& config)
 
     m_logger.log_trace("Linux Window initialized");
     
-    // Disable VSync
-    XSync(m_display, false);
-    
     // Create GLX context and make current
     m_context = glXCreateContext(m_display, m_visual, nullptr, GL_TRUE);
     glXMakeCurrent(m_display, m_window, m_context);
@@ -154,6 +156,13 @@ bool mnm::linux_window::init(const mnm::window_config& config)
     // Set clear color and initial viewport size
     glClearColor(0.5f, 0.6f, 0.7f, 1.0f);
     glViewport(0, 0, config.width, config.height);
+
+    // Query pointer to swap interval function
+    PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT=nullptr;
+    glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalEXT");
+
+    // Set VSync
+    glXSwapIntervalEXT(m_display, m_window, config.vsync);
 
     return true;
 }

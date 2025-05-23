@@ -40,7 +40,14 @@ void mnm::context::init_window(u16 width, u16 height, const char* title)
     #if defined(MNEMOS_PLATFORM_LINUX)
         m_window = new mnm::linux_window(s_logger);
 
-        if(!m_window->init({width, height, title}))
+        if(!m_window->init(
+            {
+                .width = width,
+                .height = height, 
+                .title = title,
+                .vsync = true
+            }
+        ))
             s_logger.log_fatal("Failed to initialize window");
     #elif defined(MNEMOS_PLATFORM_WINDOWS)
         // TODO: Windows implementation
@@ -52,7 +59,7 @@ void mnm::context::init_renderer()
     if(!m_renderer.init())
         s_logger.log_fatal("Failed to initialize renderer");
 
-    m_timer.init();
+    m_timer.init(true);
 }
 
 void mnm::context::shutdown()
@@ -102,11 +109,11 @@ void mnm::context::update_timer()
 
 void mnm::context::render_scene()
 {
-    m_renderer.render();
+    m_renderer.render(m_timer.get_delta_time());
 }
 
 void mnm::context::swap_buffers()
 {
     m_window->swap_buffers();
-    m_timer.tick();
+    m_timer.sleep();
 }

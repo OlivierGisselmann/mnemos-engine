@@ -1,6 +1,6 @@
 project(engine)
 
-# Fetch OpenGL library
+# Fetch OpenGL and GLEW libraries
 find_package(OpenGL REQUIRED)
 
 # Get all source files

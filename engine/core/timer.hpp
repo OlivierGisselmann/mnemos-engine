@@ -3,7 +3,7 @@
 #include <platform/types.hpp>
 #include <core/log.hpp>
 
-#include <sys/time.h>
+#include <chrono>
 #include <unistd.h>
 
 namespace mnm
@@ -14,23 +14,23 @@ namespace mnm
         timer(logger& logger);
         ~timer();
 
-        void init();
+        void init(bool show_fps);
         void update();
-        void tick();
+        void sleep();
 
         f64 get_delta_time();
 
     private:
-        f64 get_milliseconds();
-
-        f64 m_prev_time;
-        f64 m_current_time;
+        std::chrono::_V2::system_clock::time_point m_last_time;
+        std::chrono::_V2::system_clock::time_point m_current_time;
         f64 m_delta_time;
-        f64 m_skip_ticks;
+        f64 m_sleep_time;
 
-        timeval m_time;
-        long m_sleep_time;
-        long m_next_game_tick;
+        i64 m_frame_count;
+        f64 m_frame_time;
+        f64 m_fps_timer;
+
+        bool m_show_fps;
 
         // Utils
         logger& m_logger;
