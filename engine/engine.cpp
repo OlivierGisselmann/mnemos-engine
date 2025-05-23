@@ -45,7 +45,7 @@ void mnm::context::init_window(u16 width, u16 height, const char* title)
                 .width = width,
                 .height = height, 
                 .title = title,
-                .vsync = true
+                .vsync = false
             }
         ))
             s_logger.log_fatal("Failed to initialize window");

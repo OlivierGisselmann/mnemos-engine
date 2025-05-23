@@ -29,8 +29,8 @@ void mnm::timer::update()
 
 void mnm::timer::sleep()
 {
-    m_frame_time = (Clock::now() - m_current_time).count() / 1e6;
-    m_sleep_time = (1.0 / 60.0) - m_frame_time;
+    m_frame_time = (Clock::now() - m_current_time).count() / 1e9;
+    m_sleep_time = (1.0 / 120.0) - m_frame_time;
 
     // Sleep if frame was shorter than targeted fps
     if(m_sleep_time > 0)
